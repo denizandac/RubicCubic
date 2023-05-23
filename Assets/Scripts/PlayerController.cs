@@ -9,9 +9,12 @@ public class PlayerController : MonoBehaviour
 
     [Header("Movement")]
     [SerializeField] private float _horizontalSpeed = 5f;
+    [SerializeField] private float _frontalSpeed = 5f;
+    [SerializeField] private float _jumpHeight = 20f;
 
-    
-
+    [Header("References")]
+    [SerializeField] private Rigidbody _rb;
+    [SerializeField] private Animator _anim;
 
     void Awake()
     {
@@ -26,11 +29,19 @@ public class PlayerController : MonoBehaviour
     } 
     void Start()
     {
-        
+        _rb = GetComponent<Rigidbody>();
     }
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
-        
+        if(Input.GetKey(KeyCode.A))
+        {
+            transform.Translate(Vector3.left * _horizontalSpeed * Time.deltaTime);
+        }
+        if(Input.GetKey(KeyCode.D))
+        {
+            transform.Translate(Vector3.right * _horizontalSpeed * Time.deltaTime);
+        }
+        transform.Translate(Vector3.forward * _frontalSpeed * Time.deltaTime);
     }
 }
