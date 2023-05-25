@@ -10,7 +10,7 @@ public class PlayerController : MonoBehaviour
 
     [Header("Movement")]
     [SerializeField] private float _horizontalSpeed = 25f;
-    [SerializeField] private float _frontalSpeed = 5f;
+    [SerializeField] private float _frontalSpeed =5f;
     [SerializeField] private float _gravityForce = 9.81f;
     [SerializeField] private float _roadWidth = 10f;
     [SerializeField] private float _playerWidth = 1f;
@@ -56,8 +56,8 @@ public class PlayerController : MonoBehaviour
     }
 
     void Update(){
-        _initialPosition.y = transform.position.y;
-        _initialPosition.z = transform.position.z;
+        _initialPosition.y = transform.localPosition.y;
+        _initialPosition.z = transform.localPosition.z;
         if(Physics.CheckSphere(new Vector3(0f,transform.position.y, 0f), _groundCheckRadius, _groundLayer)){
             _isGrounded = true;
         }
@@ -65,7 +65,7 @@ public class PlayerController : MonoBehaviour
             _isGrounded = false;
         }
         if(Input.GetMouseButtonDown(0)){
-            _initialPosition.x = transform.position.x;
+            _initialPosition.x = transform.localPosition.x;
             _isDragging = true;
             _dragStartX = Input.mousePosition.x;
         }
@@ -92,14 +92,15 @@ public class PlayerController : MonoBehaviour
         if (_isDragging)
         {
             Vector3 targetPosition = new Vector3(_targetX, _initialPosition.y, _initialPosition.z);
-            transform.position = Vector3.Lerp(transform.position, targetPosition, Time.fixedDeltaTime*_LerpSpeed);
+            transform.localPosition = Vector3.Lerp(transform.localPosition, targetPosition, Time.fixedDeltaTime*_LerpSpeed);
         }
 
-        transform.Translate(Vector3.forward * _frontalSpeed * Time.deltaTime);
+        transform.parent.Translate(Vector3.forward * _frontalSpeed * Time.deltaTime);
 
         if(!_isGrounded){
-            transform.Translate(Vector3.down * _gravityForce * Time.deltaTime);
+            transform.parent.Translate(Vector3.down * _gravityForce * Time.deltaTime);
         }
+
         #region Jumping       
         // Jumping (if needed)
         // if(_willJump && _isGrounded)
